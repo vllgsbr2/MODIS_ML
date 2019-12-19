@@ -5,7 +5,13 @@ This script will produce a 2 panel plot. An enhanced RGB and a cloud mask that s
 Purpose of this code is to efficiently find good candidate granules to use as
 training data for a MODIS cloud mask model based in AI.
 
-#NOTE: IF ADJUST 'figsize' IF FIGURE IS TOO BIG/SMALL
+Simply run and the plot will show; then follow the prompts on the terminal.
+You type 1 for good or 0 for bad training candidate based on how well the 
+cloud mask matches the RGB simply by inspection. This repeats until all the data
+has been choosen. Your answer is recorded in a file named label_csv. It has
+two columns: time stamp, label
+
+NOTE: ADJUST 'figsize' IF FIGURE IS TOO BIG/SMALL
 '''
 
 import matplotlib.pyplot as plt

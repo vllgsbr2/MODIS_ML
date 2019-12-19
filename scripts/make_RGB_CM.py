@@ -2,8 +2,8 @@
 make_RGB_CM.py (CM = Cloud Mask)
 
 This script will take in MODIS reflectances, cloud mask and saves them.
-An enhanced RGB and a cloud mask that share an axis. The purpose of this code is
-to preprocess the data into images to view in inspect_MODIS_CMQ.py
+The purpose of this code is to preprocess the data into images to view 
+in inspect_MODIS_CMQ.py
 '''
 
 import matplotlib.pyplot as plt
