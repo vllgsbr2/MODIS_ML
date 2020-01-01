@@ -62,31 +62,47 @@ def get_radiance_or_reflectance(data_raw, data_field, rad_or_ref):
     '''
     #values of digital numbers above this are invalid science data.
     max_DN = 32767
-
+    saturation_DN = 65533
+    aggregate_failure_DN = 65528
+    above_threshold_DN = 65529
+	
     #get dimensions of raw data
     num_bands = np.ma.size(data_raw, axis=0)
     num_horizontal = np.ma.size(data_raw, axis=1)
     num_vertical = np.ma.size(data_raw, axis=2)
 
     #reshape raw data to perform scale and offset correction
-    data_raw_temp = np.reshape(data_raw,(num_bands, num_horizontal * num_vertical)).astype(np.float64)
     scale_factor, offset = get_scale_and_offset(data_field, rad_or_ref)
-    data_raw_temp[data_raw_temp > max_DN] = np.nan
+    data_raw = data_raw.astype(np.float32)
+    data_raw[data_raw==saturation_DN] = max_DN
+    data_raw[data_raw==above_threshold_DN] = max_DN
+    data_raw[data_raw > max_DN] = np.nan
 
-    #correct raw data to get radiance/reflectance values
-    #correct first band manually
-    data_corrected_total = (data_raw_temp[0,:] - offset[0]) * scale_factor[0]
-    #for loop to put all the bands together
-    for i in range(1,num_bands):
-        #corrected band
-        data_corrected = (data_raw_temp[i,:] - offset[i]) * scale_factor[i]
-        #aggregate bands
-        data_corrected_total = np.concatenate((data_corrected_total,\
-                                               data_corrected), axis=0)
+	
+    scale_factors = np.array(scale_factor)[:,np.newaxis,np.newaxis]
+    offsets = np.array(offset)[:,np.newaxis,np.newaxis]
+	
+    data_raw = (data_raw - offsets) * scale_factors
 
-    #get original shape and return radiance/reflectance
-    return data_corrected_total.reshape((num_bands, num_horizontal,\
-                                         num_vertical))
+    return data_raw
+    #offsets = np.ones(shape=[len(offset)]+[1,1])*offset
+
+#     #data_corrected_total = data_raw.copy()
+#     data_raw = (data_raw - offsets) * scale_factors
+#     #correct raw data to get radiance/reflectance values
+#     #correct first band manually
+#     data_corrected_total = (data_raw_temp[0,:] - offset[0]) * scale_factor[0]
+#     #for loop to put all the bands together
+#     for i in range(1,num_bands):
+#         #corrected band
+#         data_corrected = (data_raw_temp[i,:] - offset[i]) * scale_factor[i]
+#         #aggregate bands
+#         data_corrected_total = np.concatenate((data_corrected_total,\
+#                                                data_corrected), axis=0)
+
+#     #get original shape and return radiance/reflectance
+#     return data_corrected_total.reshape((num_bands, num_horizontal,\
+#                                          num_vertical))
 
 def prepare_data(filename, fieldname, rad_or_ref):
     '''
