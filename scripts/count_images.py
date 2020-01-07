@@ -6,8 +6,8 @@ and look for a -1, 0, or 1.
 0  -> not fit for training data
 1  -> fit for training data
 
-And will return the number of images per file and the total number of classified
-images in each file
+And will return the number of images per file, the total number of classified
+images in each file, and the number of images with a label of 1.
 '''
 
 import h5py
@@ -24,12 +24,11 @@ def count_images(file_path):
     num_valid_images = 0
     for i in range(num_images):
         path = 'Image_{0:03d}/ClassificationAccuracy/'.format(i)
+
         if image_file[path][()] != -1:
             label_count += 1
-        elif image_file[path][()] == 1:
+        if image_file[path][()] == 1:
             num_valid_images += 1
-        else:
-            pass
 
     return label_count, num_images, num_valid_images
 
@@ -37,7 +36,7 @@ if __name__ == '__main__':
     import os
 
     home = '/Users/vllgsbr2/Desktop/MODIS_ML_data_sample/'
-    files = os.listdir('/Users/vllgsbr2/Desktop/MODIS_ML_data_sample/')
+    files = os.listdir(home)
     files = [home + x for x in files]
 
     total_labeled = 0
