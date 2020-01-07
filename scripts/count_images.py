@@ -36,8 +36,8 @@ def count_images(file_path):
 if __name__ == '__main__':
     import os
 
-    home = '/Users/vllgsbr2/Desktop/MODIS_ML_data_sample/'
-    files = os.listdir('/Users/vllgsbr2/Desktop/MODIS_ML_data_sample/')
+    home = '/data/keeling/a/vllgsbr2/c/MODIS_ML/processed_data_Javier/'
+    files = os.listdir(home)
     files = [home + x for x in files]
 
     total_labeled = 0
