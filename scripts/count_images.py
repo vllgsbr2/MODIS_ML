@@ -52,6 +52,6 @@ if __name__ == '__main__':
         print('file: {}\nlabel_count: {}\nnum_images: {}'\
               .format(file[-17:-5], label_count, num_images))
 
-    total_invalid_images = total_images - total_valid_images
+    total_invalid_images = total_labeled - total_valid_images
     print('total_labeled: {} total_images: {} total_valid_images: {} total_invalid_images: {}'\
           .format(total_labeled, total_images, total_valid_images, total_invalid_images))
